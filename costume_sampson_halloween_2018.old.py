@@ -3,20 +3,13 @@ import neopixel
 import random
 
 # Setup globals
-_npCount = 4
 _npRightArm = neopixel.NeoPixel(pin0, 5)
 _npTemple = neopixel.NeoPixel(pin1, 1)
 _npCircle = neopixel.NeoPixel(pin2, 16)
 _npLeftArm = neopixel.NeoPixel(pin8, 5)
 
-_circleOnOffCount = 0
-_circleStatusOn = True
-
-_templeOnOffCount = 0
-_templeStatusOn = True
-
 _lastTimeUpdate = 0
-_mainDelayTime = 1000
+_mainDelayTime = 5000
 _ledSleepTime = 500
 _isCircleOn = True
 _isLeftOn = True
@@ -39,7 +32,7 @@ while running_time() < 5000:
 display.clear()
 
 
-def ledLeftArm():
+def ledLeftArm(isOn):
     display.show(_letterL)
     global _isLeftOnLast
     if not isOn and not _isLeftOnLast:
@@ -82,54 +75,45 @@ def ledRightArm(isOn):
 
 def ledTemple():
     display.show(_letterT)
-    led = 0
-    
-    if _templeStatusOn:
-        _npTemple[led] = (0, randint(0, 200), 0)
-        _npTemple.show()
-    else:
-        _npTemple.clear()
-    
-    _templeStatusOn = not _templeStatusOn
+    color = random.randint(0, 250)
+    for i in range(0, len(_npTemple)):
+        _npTemple[i] = (0, color, 0)
+    _npTemple.show()
+    sleep(_ledSleepTime*2)
+    _npTemple.clear()
 
 
 def neopixelCircle():
     display.show(_letterC)
-    led = randint(0, len(_npCircle))
-    color = (0, 0, 0)
-    
-    if _circleStatusOn
-        color = (random.randint(0, 250), random.randint(0, 250), random.randint(0, 250))
-    
-    _npCircle[led] = color
-    _npCircle.show()
-    
-    _circleOnOffCount =+ 1
-    if _circleOnOffCount % len(_npCircle) == 0:
-        _circleStatusOn = not _circleStatusOn
-        _circleOnOffCount = 0
-    
+    for i in range(0, len(_npCircle)):
+        red = random.randint(0, 250)
+        green = random.randint(0, 250)
+        blue = random.randint(0, 250)
+        if _isCircleOn:
+            _npCircle[i] = (red, green, blue)
+        else:
+            _npCircle[i] = (0, 0, 0)
+        _npCircle.show()
+        sleep(100)
 
 while True:
-    # faster changes to LEDs (smaller increments)
     if button_a.was_pressed():
-        _mainDelayTime =- 20
+        _isLeftOn = not _isLeftOn
+        ledLeftArm(_isLeftOn)
     
-    # slower changes to LEDs (larger increments)
     if button_b.was_pressed():
-        _mainDelayTime =+ 20
+        _isRightOn = not _isRightOn
+        ledRightArm(_isRightOn)
         
     if running_time() - _lastTimeUpdate > _mainDelayTime:
-        npSelect = randint(0, _npCount*2)
+        neopixelCircle()
+        ledTemple()
+        if _isLeftOn:
+            ledLeftArm(not _isLeftOnLast)
         
-        if npSelect == 0:
-            ledTemple()
-        if else npSelect == 1:
-            ledLeftArm()
-        if else npSelect == 2:
-            ledRightArm()
-        else:
-            neopixelCircle()
-            
+        if _isRightOn:
+            ledRightArm(not _isRightOnLast)
+
+        _isCircleOn = not _isCircleOn
         _lastTimeUpdate = running_time()
     
