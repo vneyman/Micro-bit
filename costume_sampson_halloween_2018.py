@@ -3,10 +3,10 @@ import neopixel
 import random
 
 # Setup globals
-_npCircle = neopixel.NeoPixel(pin0, 16)
+_npRightArm = neopixel.NeoPixel(pin0, 5)
 _npTemple = neopixel.NeoPixel(pin1, 1)
-_npLeftArm = neopixel.NeoPixel(pin3, 5)
-_npRightArm = neopixel.NeoPixel(pin6, 5)
+_npCircle = neopixel.NeoPixel(pin2, 16)
+_npLeftArm = neopixel.NeoPixel(pin8, 5)
 
 _lastTimeUpdate = 0
 _mainDelayTime = 5000
@@ -21,12 +21,19 @@ _ledWhite = (0, 0, 0)
 display.scroll("Hi")
 sleep(100)
 
+_letterL = Image("05000:""05000:""05000:""05000:""05555")
+_letterR = Image("05550:""05050:""05500:""05050:""05005")
+_letterT = Image("05550:""00500:""00500:""00500:""00500")
+_letterC = Image("00550:""05000:""05000:""05000:""00550")
+
 while running_time() < 5000:
     display.show(Image.SKULL)
 
 display.clear()
 
+
 def ledLeftArm(isOn):
+    display.show(_letterL)
     global _isLeftOnLast
     if not isOn and not _isLeftOnLast:
         return False
@@ -46,6 +53,7 @@ def ledLeftArm(isOn):
     _isLeftOnLast = isOn
 
 def ledRightArm(isOn):
+    display.show(_letterR)
     global _isRightOnLast
     if not isOn and not _isRightOnLast:
         return False
@@ -66,14 +74,17 @@ def ledRightArm(isOn):
     
 
 def ledTemple():
+    display.show(_letterT)
     color = random.randint(0, 250)
     for i in range(0, len(_npTemple)):
         _npTemple[i] = (0, color, 0)
-    
     _npTemple.show()
-    sleep(_ledSleepTime)
+    sleep(_ledSleepTime*2)
+    _npTemple.clear()
+
 
 def neopixelCircle():
+    display.show(_letterC)
     for i in range(0, len(_npCircle)):
         red = random.randint(0, 250)
         green = random.randint(0, 250)
