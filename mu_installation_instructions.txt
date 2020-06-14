@@ -1,0 +1,33 @@
+https://support.microbit.org/support/solutions/articles/19000038762-how-do-i-install-the-latest-mu-on-raspberry-pi
+https://s3-us-west-2.amazonaws.com/ardublockly-builds/microbit/raspberry_pi/installation_instructions.txt
+
+Installation Instructions
+=========================
+
+Every time a new update is added to the Mu software (https://github.com/ntoll/mu) a build is 
+automatically triggered and the resulting application uploaded here with a time stamp on its
+file name.
+
+There are currently two available formats for the Mu software, the mu-<date> binary file, and the
+mu-<date>.deb package file. 
+
+
+The binary file is a self-contained executable with everything included. This should be able to
+run in most Rasbian Jessie installations, but there might be incompatibilities with older
+versions.
+To run the software first make sure that the file is executable, so on the command line:
+
+> chmod +x <mu-file-path>
+> ./<mu-file-path>
+
+
+The deb package contains only the program data, so it will need an internet connection to install
+the dependencies. This deb package should be able to work in most Debian based distributions.
+To install Mu execute the following on the command line:
+
+> sudo dpkg -i <mu.deb-file-path>
+> sudo apt-get -f install
+
+
+If something doesn't work, or for any questions, you can report a new issue on:
+https://github.com/ntoll/mu/issues
